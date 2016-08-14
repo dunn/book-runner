@@ -13,7 +13,9 @@ ${TMPDIR}/decon.txt: ${TMPPATH}/text.js
 
 
 
-.PHONY: test test-format test-deconstruct
+.PHONY: check test test-format test-deconstruct
+
+check: test
 
 test: test-format test-deconstruct
 
