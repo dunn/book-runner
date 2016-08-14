@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with read-thing.  If not, see <http://www.gnu.org/licenses/>.
 
+set -eu
+
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   echo "Error: missing arguments"
   echo
@@ -58,15 +60,14 @@ text_start > "$text_out"
 # http://stackoverflow.com/questions/4642191/read-line-by-line-in-bash-script
 cat "$book" | \
 while read -r line; do
-  whargh=$(echo "$line" | ag '^\*+$')
-  if [[ "$whargh" != "" ]]; then
+  if [[ "$line" =~ ^\*+$ ]]; then
     echo '  ],' | tee -a "$text_out"
     echo '  [' | tee -a "$text_out"
     line=''
   fi
   if [[ "$line" != '' ]]; then
     # escape single quotes
-    echo "'${line//\'/\'}'," | tee -a "$text_out"
+    echo "'${line//\'/\\\'}'," | tee -a "$text_out"
   fi
 done
 
