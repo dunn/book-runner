@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+  echo "Error: missing arguments"
+  echo
+  echo "Usage:"
+  echo "./format-book <book.txt> <output-directory>"
+  exit 1
+fi
+
+book="$1"
+text_out="$2/text.js"
+cast_out="$2/cast.js"
+
+if [[ ! -d "$2" ]]; then
+  echo "$2 isn't a directory."
+  exit 1
+fi
+
+if [[ -f "$text_out" ]]; then
+	echo "$text_out already exists."
+	exit 1
+fi
+if [[ -f "$cast_out" ]]; then
+	echo "$cast_out already exists."
+	exit 1
+fi
+
+text_start() {
+cat <<- EOF
+'use strict';
+const path = require('path');
+const cast = require(path.join(__dirname, 'cast.js'));
+module.exports = [
+  [
+EOF
+}
+
+text_start > "$text_out"
+
+# http://stackoverflow.com/questions/4642191/read-line-by-line-in-bash-script
+cat "$book" | \
+while read -r line; do
+  whargh=$(echo "$line" | ag '^\*+$')
+  if [[ "$whargh" != "" ]]; then
+    echo '  ],' | tee -a "$text_out"
+    echo '  [' | tee -a "$text_out"
+    line=''
+  fi
+  if [[ "$line" != '' ]]; then
+    echo "'$line'," | tee -a "$text_out"
+  fi
+done
+
+echo '  ]' | tee -a "$text_out"
+echo '];' | tee -a "$text_out"
+
+sed -E -i '' "s:(cast\.[a-z]{12}):\'\ \+\ \1\ + \':g" "$text_out"
+
+echo "'use strict';" > "$cast_out"
+echo 'const cast = {' >> "$cast_out"
+
+# Create the cast list
+tr ' ' '\n' <"$text_out" | sort | uniq | ag "cast\.[a-z]{12}" >> "$cast_out"
+sed -E -i '' "s/^cast\.([a-z]{12})$/\ \ \1:\ \'\',/" "$cast_out"
+
+# Create the frequency information
+tr ' ' '\n' <"text_out" | sort | uniq -c | ag "cast\.[a-z]{12}" | sort -rn | awk '{ FS=" "; print $2","$1; }' > "$2/freq.csv"
+
+# This makes it possible to reverse the conversion, e.g.:
+# ./deconstruct ../book3/text.js > ../plaintext/03.txt
+cast_end() {
+cat <<- EOF
+};
+
+if (!!process.env.DECONSTRUCT) {
+  for (let k in cast)
+    cast[k] = \`cast.\${k}\`;
+}
+module.exports = cast;
+EOF
+}
+
+cast_end >> "$cast_out"

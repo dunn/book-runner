@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+(function() {
+  'use strict';
+
+  if (!process.argv[2]) {
+    console.error('Error: missing argument\n\nUsage:\n./run <directory>');
+    return process.exitCode = 1;
+  }
+
+  const run = require('../lib/storyteller.js');
+
+  const book = process.args[2];
+  const mode = process.args[3] === undefined ? '' : 'dry';
+
+  run(book, mode);
+})();

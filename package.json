@@ -1,0 +1,16 @@
+{
+  "name": "book-runner",
+  "version": "0.1.0",
+  "description": "Scripts for running a @SortingSong-style Twitter bot",
+  "main": "bin/run",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Dunn <dunn.alex@gmail.com> (https://twitter.com/dunndunndunn)",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "async": "^2.0.1",
+    "minimist": "^1.2.0",
+    "twit": "^2.2.4"
+  }
+}
