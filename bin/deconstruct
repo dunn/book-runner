@@ -28,15 +28,22 @@
 
   const book = require(process.argv[2]).reverse();
 
+  let output = '';
+
   let l = book.length;
   while (l--) {
     const batch = book[l].reverse();
     let b = batch.length;
     while (b--) {
-      const broke = batch[b].replace(/\n/g, '\\n');
-      console.log(`${broke}\n`);
+      const line = batch[b].replace(/\n/g, '\\n');
+      // Only add trailing linebreaks if we're not at the end
+      if (l > 0 || b > 0)
+        output += `${line}\n\n`;
+      else
+        output += line;
     }
     if (l > 0)
-      console.log('******\n');
+      output += '******\n\n';
   }
+  console.log(output);
 })();
