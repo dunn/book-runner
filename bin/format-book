@@ -65,24 +65,25 @@ while read -r line; do
     line=''
   fi
   if [[ "$line" != '' ]]; then
-    echo "'$line'," | tee -a "$text_out"
+    # escape single quotes
+    echo "'${line//\'/\'}'," | tee -a "$text_out"
   fi
 done
 
 echo '  ]' | tee -a "$text_out"
 echo '];' | tee -a "$text_out"
 
-sed -E -i '' "s:(cast\.[a-z]{12}):\'\ \+\ \1\ + \':g" "$text_out"
+sed -E -i '' "s:(cast\.[^\ ]{12}):\'\ \+\ \1\ + \':g" "$text_out"
 
 echo "'use strict';" > "$cast_out"
 echo 'const cast = {' >> "$cast_out"
 
 # Create the cast list
-tr ' ' '\n' <"$text_out" | sort | uniq | ag "cast\.[a-z]{12}" >> "$cast_out"
-sed -E -i '' "s/^cast\.([a-z]{12})$/\ \ \1:\ \'\',/" "$cast_out"
+tr ' ' '\n' <"$text_out" | sort | uniq | ag "cast\.[^\ ]{12}" >> "$cast_out"
+sed -E -i '' "s/^cast\.([^\ ]{12})$/\ \ \1:\ \'\',/" "$cast_out"
 
 # Create the frequency information
-tr ' ' '\n' <"$text_out" | sort | uniq -c | ag "cast\.[a-z]{12}" | sort -rn | awk '{ FS=" "; print $2","$1; }' > "$2/freq.csv"
+tr ' ' '\n' <"$text_out" | sort | uniq -c | ag "cast\.[^\ ]{12}" | sort -rn | awk '{ FS=" "; print $2","$1; }' > "$2/freq.csv"
 
 # This makes it possible to reverse the conversion, e.g.:
 # ./deconstruct ../book3/text.js > ../plaintext/03.txt
