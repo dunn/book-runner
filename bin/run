@@ -31,9 +31,10 @@ const tell = require('../lib/storyteller.js');
   }
 
   const options = {
-    book: args._[0],
+    book: path.join('..', args._[0]),
     dryRun: args.dry,
-    dbfile: args.dbfile || path.join(__dirname, path.basename(args._[0]))
+    dbfile: args.dbfile ||
+      `${path.join(__dirname, '..', path.basename(args._[0]))}.status`
   }
 
   tell(options)
