@@ -20,7 +20,7 @@
 (function() {
   'use strict';
   if (!process.argv[2]) {
-    console.error('Error: missing argument\n\nUsage:\n./deconstruct ../book2/text.js > output.txt');
+    console.error('Error: missing argument\n\nUsage:\n./deconstruct /absolute/path/to/text.js > output.txt');
     return process.exitCode = 1;
   }
 
