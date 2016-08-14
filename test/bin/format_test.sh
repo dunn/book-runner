@@ -32,7 +32,7 @@ fi
 
 sha_cmd=sha256sum
 if [[ ! -x $(which sha256sum) ]]; then
-  sha_cmd="gsha256sum"
+  sha_cmd="shasum -a 256"
 fi
 
 CAST_SHA=$(eval "$sha_cmd $1/cast.js" | sed 's:\ .*::g')
