@@ -19,26 +19,37 @@
 
 set -eu
 
-sha_cmd=sha256sum
-if [[ ! -x $(which sha256sum) ]]; then
-  sha_cmd="shasum -a 256"
+if [[ ! -d "$1" ]] || [[ ! -d "$2" ]]; then
+  echo "Both arguments ($1 and $2) must be directories"
+  exit 2
 fi
 
-CAST_SHA=$(eval $sha_cmd $1/cast.js | sed 's:\ .*::g')
-TEXT_SHA=$(eval $sha_cmd $1/text.js | sed 's:\ .*::g')
-FREQ_SHA=$(eval $sha_cmd $1/freq.csv | sed 's:\ .*::g')
+if [[ ! -f "$1/cast.js" ]] || [[ ! -f "$1/text.js" ]] || [[ ! -f "$1/freq.csv" ]]
+   [[ ! -f "$2/cast.js" ]] || [[ ! -f "$2/text.js" ]] || [[ ! -f "$2/freq.csv" ]]; then
+  echo "Missing files in output directories"
+  exit 3
+fi
 
-if [[ $(eval $sha_cmd $2/cast.js | sed 's:\ .*::g') != "$CAST_SHA" ]]; then
+sha_cmd=sha256sum
+if [[ ! -x $(which sha256sum) ]]; then
+  sha_cmd="gsha256sum"
+fi
+
+CAST_SHA=$(eval "$sha_cmd $1/cast.js" | sed 's:\ .*::g')
+TEXT_SHA=$(eval "$sha_cmd $1/text.js" | sed 's:\ .*::g')
+FREQ_SHA=$(eval "$sha_cmd $1/freq.csv" | sed 's:\ .*::g')
+
+if [[ $(eval "$sha_cmd $2/cast.js" | sed 's:\ .*::g') != "$CAST_SHA" ]]; then
   echo "$2/cast.js has the wrong SHA256"
   exit 1
 fi
 
-if [[ $(eval $sha_cmd $2/text.js | sed 's:\ .*::g') != "$TEXT_SHA" ]]; then
+if [[ $(eval "$sha_cmd $2/text.js" | sed 's:\ .*::g') != "$TEXT_SHA" ]]; then
   echo "$2/text.js has the wrong SHA256"
   exit 1
 fi
 
-if [[ $(eval $sha_cmd $2/freq.csv | sed 's:\ .*::g') != "$FREQ_SHA" ]]; then
+if [[ $(eval "$sha_cmd $2/freq.csv" | sed 's:\ .*::g') != "$FREQ_SHA" ]]; then
   echo "$2/freq.csv has the wrong SHA256"
   exit 1
 fi
