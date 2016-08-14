@@ -1,17 +1,23 @@
 #!/usr/bin/env node
 
+const path = require('path');
+const tell = require('../lib/storyteller.js');
+
 (function() {
   'use strict';
 
-  if (!process.argv[2]) {
-    console.error('Error: missing argument\n\nUsage:\n./run <directory>');
+  const args = require('minimist')(process.argv.slice(2));
+
+  if (args._.length === 0) {
+    console.error('Error: missing directory argument\n\nUsage:\n./run [--dry=<bool>] [--dbfile=<path>] <directory>');
     return process.exitCode = 1;
   }
 
-  const run = require('../lib/storyteller.js');
+  const options = {
+    book: args._[0],
+    dryRun: args.dry,
+    dbfile: args.dbfile || path.join(__dirname, path.basename(args._[0]))
+  }
 
-  const book = process.args[2];
-  const mode = process.args[3] === undefined ? '' : 'dry';
-
-  run(book, mode);
+  tell(options)
 })();
