@@ -17,16 +17,18 @@
 // You should have received a copy of the GNU General Public License
 // along with read-thing.  If not, see <http://www.gnu.org/licenses/>.
 
+const fs = require('fs');
+
 (function() {
   'use strict';
   if (!process.argv[2]) {
-    console.error('Error: missing argument\n\nUsage:\n./deconstruct /absolute/path/to/text.js > output.txt');
+    console.error('Error: missing argument\n\nUsage:\n./deconstruct path/to/text.js > output.txt');
     return process.exitCode = 1;
   }
 
   process.env.DECONSTRUCT = '1';
 
-  const book = require(process.argv[2]).reverse();
+  const book = require(fs.realpathSync(process.argv[2])).reverse();
 
   let output = '';
 
