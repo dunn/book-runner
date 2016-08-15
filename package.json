@@ -4,7 +4,7 @@
   "description": "Scripts for running a @SortingSong-style Twitter bot",
   "main": "bin/run",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make check"
   },
   "author": "Alex Dunn <dunn.alex@gmail.com> (https://twitter.com/dunndunndunn)",
   "license": "GPL-3.0",
