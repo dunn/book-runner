@@ -135,9 +135,11 @@ bot.
 
 ## step 7: go go goooo
 
-All that’s left is to make sure your Twitter app’s information is in
-`config/secrets.js`, and turn on your bot!  I usually set a cron job
-to run `bin/run` every 15 minutes:
+If you haven’t yet, install the project dependencies with `npm i`.
+
+Now all that’s left is to make sure your Twitter app’s information is
+in `config/secrets.js`, and turn on your bot!  I usually set a cron
+job to run `bin/run` every 15 minutes:
 
 ```cron
 */15 * * * * bin/run path/to/text.js >> /var/log/bork.log 2>&1
