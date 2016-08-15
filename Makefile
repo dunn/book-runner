@@ -29,7 +29,8 @@ test-deconstruct: ${TMPDIR}/decon.txt
 
 test-output: test-format
 	for n in $$(seq 0 4); do \
-		bin/run --dry=true --dbfile=${TMPDIR}/${SECONDS}.status ${TMPPATH} > ${TMPDIR}/${SECONDS}_$$n.log && \
+		bin/run --dry=true --dbfile=${TMPDIR}/${SECONDS}.status ${TMPPATH}/text.js \
+			> ${TMPDIR}/${SECONDS}_$$n.log && \
 		test/bin/compare.sh test/fixtures/mansfield_park/console/$$n.log ${TMPDIR}/${SECONDS}_$$n.log || exit 1; \
 	done
 
