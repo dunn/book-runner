@@ -37,7 +37,8 @@ fi
 TEXT_SHA=$(eval "$sha_cmd $1" | sed 's:\ .*::g')
 
 if [[ $(eval "$sha_cmd $2" | sed 's:\ .*::g') != "$TEXT_SHA" ]]; then
-  echo "$2 has the wrong SHA256"
+  echo "$1 and $2 are different:"
+  git diff --no-index -- "$1" "$2"
   exit 1
 fi
 
