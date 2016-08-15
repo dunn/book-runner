@@ -10,6 +10,8 @@ anything really) as the text is tweeted out incrementally.
 - any version of [Node](https://nodejs.org) that supports string
   interpolation (probably version 3 or higher)
 
+- GNU sed; `brew install gnu-sed` on macOS
+
 - a Twitter account with an [application](https://apps.twitter.com/)
   that has read-write permissions and OAuth access tokens.
 
