@@ -1,9 +1,9 @@
 TMPDIR ?= /tmp
-SUBTMP ?= $(shell date "+%s")
-TMPPATH := ${TMPDIR}/book-runner_${SUBTMP}
+SECONDS := $(shell date "+%s")
+TMPPATH := ${TMPDIR}/book-runner_${SECONDS}
 
 ${TMPPATH}:
-	mkdir -p ${TMPDIR}/book-runner_${SUBTMP}
+	mkdir -p ${TMPDIR}/book-runner_${SECONDS}
 
 ${TMPPATH}/%: ${TMPPATH}
 	bin/format-book test/fixtures/mansfield_park/input.txt ${TMPPATH}
@@ -13,17 +13,25 @@ ${TMPDIR}/decon.txt: ${TMPPATH}/text.js
 
 
 
-.PHONY: check test test-format test-deconstruct
+.PHONY: check test test-format test-deconstruct test-output
 
 check: test
 
-test: test-format test-deconstruct
+test: test-format test-deconstruct test-output
 
 test-format: ${TMPPATH}/cast.js ${TMPPATH}/text.js ${TMPPATH}/freq.csv
-	test/bin/format_test.sh test/fixtures/mansfield_park/formatted ${TMPPATH}
+	test/bin/compare.sh test/fixtures/mansfield_park/formatted/cast.js ${TMPPATH}/cast.js
+	test/bin/compare.sh test/fixtures/mansfield_park/formatted/text.js ${TMPPATH}/text.js
+	test/bin/compare.sh test/fixtures/mansfield_park/formatted/freq.csv ${TMPPATH}/freq.csv
 
 test-deconstruct: ${TMPDIR}/decon.txt
-	test/bin/deconstruct_test.sh test/fixtures/mansfield_park/input.txt ${TMPDIR}/decon.txt
+	test/bin/compare.sh test/fixtures/mansfield_park/input.txt ${TMPDIR}/decon.txt
+
+test-output: test-format
+	for n in $$(seq 0 4); do \
+		bin/run --dry=true --dbfile=${TMPDIR}/${SECONDS}.status ${TMPPATH} > ${TMPDIR}/${SECONDS}_$$n.log && \
+		test/bin/compare.sh test/fixtures/mansfield_park/console/$$n.log ${TMPDIR}/${SECONDS}_$$n.log || exit 1; \
+	done
 
 clean:
 	rm -rf ${TMPDIR}/book-runner_*
