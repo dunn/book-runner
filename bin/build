@@ -68,7 +68,7 @@ while read -r line; do
   fi
   if [[ "$line" != '' ]]; then
     # escape single quotes
-    echo "'${line//\'/\\\'}'," | tee -a "$text_out"
+    echo "'$(echo $line | sed "s:':\\\\':")'," | tee -a "$text_out"
   fi
 done
 
