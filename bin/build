@@ -31,6 +31,7 @@ book="$1"
 text_out="$2/text.js"
 cast_out="$2/cast.js"
 
+mkdir -p "$2"
 if [[ ! -d "$2" ]]; then
   echo "$2 isn't a directory."
   exit 1
