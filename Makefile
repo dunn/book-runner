@@ -6,7 +6,7 @@ ${TMPPATH}:
 	mkdir -p ${TMPDIR}/book-runner_${SECONDS}
 
 ${TMPPATH}/%: ${TMPPATH}
-	bin/format-book test/fixtures/mansfield_park/input.txt ${TMPPATH}
+	bin/build test/fixtures/mansfield_park/input.txt ${TMPPATH}
 
 ${TMPDIR}/decon.txt: ${TMPPATH}/text.js
 	bin/deconstruct ${TMPPATH}/text.js > ${TMPDIR}/decon.txt

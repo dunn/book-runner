@@ -23,7 +23,7 @@ if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   echo "Error: missing arguments"
   echo
   echo "Usage:"
-  echo "./format-book <book.txt> <output-directory>"
+  echo "bin/build <book.txt> <output-directory>"
   exit 1
 fi
 
