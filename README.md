@@ -90,8 +90,8 @@ You can adjust this by changing the `TWEET_PAUSE` constant in
 Once you’ve prepared your text, run `bin/build` to convert it into a
 set of JavaScript files that are used by `bin/run`:
 
-```shell
-bin/build path/to/text.txt path/to/output/directory
+```
+bin/build <path/to/text.txt> <path/to/output/directory>
 ```
 
 The `text.txt` is your prepared test, and the output directory is
@@ -122,7 +122,7 @@ Once you’ve filled out your `cast.js` MadLibs, there are a few ways to
 make sure everything is good to go before flipping the switch on your
 bot.
 
-- `bin/length path/to/text.js` can tell you if any of your lines are
+- `bin/length <path/to/text.js>` can tell you if any of your lines are
   longer than 140 characters.
 
 - `bin/line <path/to/text.js> <number>` will show you what the
