@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+// Copyright 2016 Alex Dunn <dunn.alex@gmail.com>
+//
+// This file is part of book-runner.
+//
+// book-runner is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published
+// by the Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
+//
+// book-runner is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with book-runner.  If not, see <http://www.gnu.org/licenses/>.
+
+'use strict';
+
+// Usage:
+//
+// bin/time </path/to/text.js> <minutes-per-tweet>
+
+const fs = require('fs');
+const moment = require('moment');
+
+const args = process.argv;
+const text = require(fs.realpathSync(args[2]));
+const perTweet = parseInt(args[3]);
+
+const lines = text.length;
+const minutes = lines * perTweet;
+const dur = moment.duration(minutes, 'minutes');
+console.log(lines + ' lines');
+console.log(dur.asDays() + ' days to complete');

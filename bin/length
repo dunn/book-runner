@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+// Copyright 2016 Alex Dunn <dunn.alex@gmail.com>
+//
+// This file is part of book-runner.
+//
+// book-runner is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published
+// by the Free Software Foundation, either version 3 of the License,
+// or (at your option) any later version.
+//
+// book-runner is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with book-runner.  If not, see <http://www.gnu.org/licenses/>.
+
+'use strict';
+
+// Usage:
+//
+// bin/length </path/to/text.js>
+
+const fs = require('fs');
+
+const args = process.argv;
+const text = require(fs.realpathSync(args[2]));
+
+let line;
+let count;
+
+const n = text.length;
+let i = 0;
+for ( i; i < n; i++ ) {
+  line = text[i];
+  let j = line.length;
+  while (j--){
+    count = line[j].length;
+    if ( count > 140 ) {
+      console.log('line ' + i +
+                  '.' + j +
+                  ': ' + line[j] +
+                  ' (' + count +
+                  ' characters)');
+    }
+  }
+}
